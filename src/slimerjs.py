@@ -97,6 +97,7 @@ def showHelp():
     print("  --proxy-auth=<username:password>   Provides authentication information for the")
     print("                                     proxy")
     print("  --proxy-type=[http|socks5|none|auto|system|config-url]    Specifies the proxy type (default is http)")
+    print("  --ssl-protocol=[SSLv3|TLSv1|TLSv1.0|TLSv1.1|TLSv1.2|TLS|any]   Indicates the ssl protocol to use.")
     #print("  --script-encoding=<enc>            Sets the encoding used for the starting")
     #print("                                     script (default is utf8)")
     #print("  --web-security=<bool>              Enables web security (default is yes)")
@@ -189,6 +190,15 @@ try:
 except OSError as err:
     print('Fatal: %s. Are you sure %s exists?' % (err, SLIMERJSLAUNCHER))
     sys.exit(1)
+
+if exitCode == 0:
+    exitFile = PROFILE_DIR + '/exitstatus'
+    if os.path.isfile(exitFile):
+        with open(exitFile, 'r') as f:
+            exitCode = int(f.read())
+else:
+    if exitCode == 1:
+        print('Gecko error: it seems %s is not compatible with SlimerJS. See Gecko version compatibility.' % (SLIMERJSLAUNCHER))
 
 if CREATE_TEMP:
     shutil.rmtree(PROFILE_DIR)
